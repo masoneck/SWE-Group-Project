@@ -17,6 +17,7 @@ app.layout = html.Div([
         )
         for page in dash.page_registry.values()
     ]),
+    #TODO: add default page or home page to remove 404 error
 	dash.page_container
 ])
 
