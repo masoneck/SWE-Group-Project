@@ -1,2 +1,3 @@
 pylint
-#TODO: add dash
+dash==2.11.0
+pandas
