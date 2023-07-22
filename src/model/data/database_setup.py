@@ -17,33 +17,36 @@ def setup_db(file_name):
 
 
 def create_items_table(cursor):
-    # TODO
-    # cursor.execute(
-    #     "CREATE TABLE"
-    # )
+    cursor.execute("""
+    CREATE TABLE Items(
+        item_id        INTEGER PRIMARY KEY AUTOINCREMENT,
+        name           VARCHAR,
+        stock          INTEGER UNSIGNED,
+        price          MONEY,
+        department_id  INTEGER UNSIGNED
+    )""")
 
 
 def create_orders_table(cursor):
-    cursor.execute(
-        "CREATE TABLE Orders("
-        "order_id   INT PRIMARY KEY,"
-        "date       DATETIME,"
-        "total      MONEY,"
-        "items      VARCHAR)"  # dict of item_id:item_amuunt, ...
-
-    )
+    cursor.execute("""
+    CREATE TABLE Orders(
+        order_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+        date       DATETIME,
+        total      MONEY,
+        items      VARCHAR
+    )""")
 
 def create_users_table(cursor):
-    cursor.execute(
-        "CREATE TABLE Users("
-        "user_id    INT PRIMARY KEY"
-        "email      VARCHAR,"
-        "first_name VARCHAR,"
-        "last_name  VARCHAR,"
-        "role       ENUM('customer', 'employee', 'administrator')"
-        "password   VARCHAR,"  # hash
-        "order      VARCHAR)"  # comma-seperated list of order_id's
-    )
+    cursor.execute("""
+    CREATE TABLE Users(
+        user_id    INTEGER PRIMARY KEY AUTOINCREMENT,
+        email      VARCHAR,
+        first_name VARCHAR,
+        last_name  VARCHAR,
+        role       VARCHAR,
+        password   VARCHAR,
+        order_id      VARCHAR
+    )""")
 
 
 if __name__ == '__main__':
