@@ -52,7 +52,7 @@ def create_users_table(cursor):
         last_name  VARCHAR,
         role       VARCHAR,
         password   VARCHAR,
-        order_id      VARCHAR
+        order_ids      VARCHAR
     )""")
 
 
