@@ -1,7 +1,7 @@
 import unittest
 
 from src.model.database import Database
-from data.database_setup import setup_db
+from data.database_setup import setup_db, delete_db
 
 class DatabaseUnitTest(unittest.TestCase):
     """Example testing class"""
@@ -13,7 +13,8 @@ class DatabaseUnitTest(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        # TODO: close connection, delete db
+        cls.db.close()
+        delete_db('data/unittest.db')
 
     def test_select_user(self):
         """Test that a user can be created"""

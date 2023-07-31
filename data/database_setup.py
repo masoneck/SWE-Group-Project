@@ -1,4 +1,4 @@
-
+import os
 import sqlite3
 import sys
 
@@ -14,7 +14,14 @@ def setup_db(file_name):
     create_users_table(cursor)
     # Create items table
     create_items_table(cursor)
+    cursor.close()
+    conn.close()
 
+def delete_db(file_name):
+    try:
+        return os.remove(file_name)
+    except FileNotFoundError:
+        pass 
 
 def create_items_table(cursor):
     cursor.execute("""
