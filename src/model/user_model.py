@@ -8,7 +8,10 @@ def validate_email(email):
 
 class UserModel:
     """Class to store and manage a User object from database"""
+    next_user_id = 0
     def __init__(self, email, first_name, last_name, role, password_hash, order_id: list):   # pylint: disable=too-many-arguments
+        self.user_id = UserModel.next_user_id
+        UserModel.next_user_id += 1
         if not validate_email(email):
             raise ValueError('Email is not valid: '+str(email))
         self.email = email
@@ -27,7 +30,7 @@ class UserModel:
 
     def to_list(self) -> list:
         """Return SQL table compatible list of values"""
-        return [self.email, self.first_name, self.last_name,
+        return [self.user_id, self.email, self.first_name, self.last_name,
                 self.role, self.password_hash, self.orders]
 
     #TODO: add methods for handling orders (add, search, etc.)

@@ -32,18 +32,18 @@ class Database:
     def _insert_statement(self, table: str, values: list, is_cursor=False):
         """Insert values into database table. Assumes values are in correct order"""
         rows = self._cursor.execute(f"""
-        INSERT INTO {table.capitalize()} VALUES ({', '.join(values)})
-        )""")
+        INSERT INTO {table.capitalize()} VALUES ({', '.join([repr(v) for v in values])})
+        """)
         return rows if is_cursor else rows.fetchall()
 
-    def add_user(self, query: dict):
+    def add_user(self, email, first_name, last_name, role, password_hash, order_id):
         """Add a user to database"""
-        user = UserModel(**query)
+        user = UserModel(email, first_name, last_name, role, password_hash, order_id)
         return self._insert_statement('Users', user.to_list())
 
-    def add_sales_item(self, query: dict):
+    def add_sales_item(self, name, stock, price, department_id):
         """Add a sales item to the database"""
-        sales_item = SalesItemModel(**query)
+        sales_item = SalesItemModel(name, stock, price, department_id)
         return self._insert_statement('Items', sales_item.to_list())
 
     def close(self):

@@ -16,7 +16,10 @@ class DatabaseUnitTest(unittest.TestCase):
         cls.db.close()
         delete_db('data/unittest.db')
 
-    def test_select_user(self):
+    def test_user_database(self):
         """Test that a user can be created"""
-        users = self.db.select_user({'user_id': 1})
+        self.db.add_user('johndoe@gmail.com', 'John', 'Doe', 'customer', 'password', [])
+        users = self.db.select_user({'first_name': 'John'})
+        self.assertTrue(len(users) == 1)
+        users = self.db.select_user({'first_name': 'Notjohn'})
         self.assertTrue(len(users) == 0)
