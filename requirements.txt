@@ -1,3 +1,4 @@
 pylint
 dash==2.11.0
 pandas
+dash-bootstrap-components
