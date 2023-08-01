@@ -1,6 +1,7 @@
 import sqlite3
 
 from src.model.user_model import UserModel
+from src.model.sales_item_model import SalesItemModel
 
 class Database:
     """Class to execute queries and statements."""
@@ -39,6 +40,11 @@ class Database:
         """Add a user to database"""
         user = UserModel(**query)
         return self._insert_statement('Users', user.to_list())
+
+    def add_sales_item(self, query: dict):
+        """Add a sales item to the database"""
+        sales_item = SalesItemModel(**query)
+        return self._insert_statement('Items', sales_item.to_list())
 
     def close(self):
         """Close connection to database"""
