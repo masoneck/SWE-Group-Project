@@ -2,6 +2,7 @@ import sqlite3
 
 from src.model.user_model import UserModel
 from src.model.sales_item_model import SalesItemModel
+from src.model.order_model import OrderModel
 
 class Database:
     """Class to execute queries and statements."""
@@ -16,10 +17,10 @@ class Database:
         """)
         return rows if is_cursor else rows.fetchall()
 
-    def select_user(self, query: dict):
+    def select_user(self, query: dict, is_raw=False):
         """Select a user from the database"""
-        return self._select_query('Users', query)
-
+        rows = self._select_query('Users', query, is_cursor=is_raw)
+        return [UserModel.from_sql(row) for row in rows]
 
     def select_sales_item(self, query: dict):
         """Select a sales item from the database"""
@@ -36,15 +37,21 @@ class Database:
         """)
         return rows if is_cursor else rows.fetchall()
 
-    def add_user(self, email, first_name, last_name, role, password_hash, order_id):
+    def add_user(self, email, first_name, last_name, role, password_hash, order_id: list):
         """Add a user to database"""
-        user = UserModel(email, first_name, last_name, role, password_hash, order_id)
+        user_id = UserModel.next_id()
+        user = UserModel(user_id, email, first_name, last_name, role, password_hash, order_id)
         return self._insert_statement('Users', user.to_list())
 
-    def add_sales_item(self, name, stock, price, department_id):
+    def add_sales_item(self, name, stock: int, price: float, department_id: int):
         """Add a sales item to the database"""
         sales_item = SalesItemModel(name, stock, price, department_id)
         return self._insert_statement('Items', sales_item.to_list())
+    
+    def add_order(self, date, customer_email: str, total: float, sales_items: dict):
+        """Add an order to the database"""
+        order = OrderModel(date, customer_email, total, sales_items)
+        return self._insert_statement('Orders', order.to_list())
 
     def close(self):
         """Close connection to database"""
