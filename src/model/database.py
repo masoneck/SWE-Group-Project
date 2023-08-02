@@ -82,7 +82,7 @@ class Database:
         order = OrderModel(date, customer_email, total, sales_items)
         return self._insert_statement('Orders', order.to_sql())
 
-    # --[ DELETE statemetns ]-- #
+    # --[ DELETE statements ]-- #
     def delete_user(self, query: dict):
         """Delete a user from the database"""
         return self._delete_statement('Users', query)
