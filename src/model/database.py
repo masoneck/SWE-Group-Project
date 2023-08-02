@@ -32,7 +32,6 @@ class Database:
 
     def _insert_statement(self, table: str, statement: str, is_cursor=False):
         """Insert values into database table. Assumes values are in correct order"""
-        print(f'debug::values::{statement}')
         rows = self._cursor.execute(f"""
         INSERT INTO {table.capitalize()} VALUES ({statement})
         """)

@@ -30,9 +30,8 @@ class UserModel:
 
     def to_sql(self) -> list:
         """Convert python object into SQL row of values"""
-        print(f'debug::orders::{self.orders!r}')
         return f'{self.user_id!r}, {self.email!r}, {self.first_name!r}, {self.last_name!r}, ' \
-                f'{self.role!r}, {self.password_hash!r}, {self.orders!r}'
+               f'{self.role!r}, {self.password_hash!r}, {self.orders!r}'
 
     @classmethod
     def from_sql(cls, sql_row):
