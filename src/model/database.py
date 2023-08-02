@@ -36,7 +36,7 @@ class Database:
         """)
         return rows if is_cursor else rows.fetchall()
 
-    # --[ SELECT statements ]-- #
+    # --[ read statements ]-- #
     def select_user(self, query: dict, is_raw=False):
         """Select a user from the database"""
         rows = self._select_query('Users', query, is_cursor=is_raw)
@@ -65,7 +65,7 @@ class Database:
         rows = self._select_all_query('Orders', is_cursor=is_raw)
         return [OrderModel.from_sql(row) for row in rows]
 
-    # --[ INSERT statements ]-- #
+    # --[ create statements ]-- #
     def add_user(self, email, first_name, last_name, role, password_hash, order_ids: list):  # pylint: disable=too-many-arguments
         """Add a user to database"""
         user_id = UserModel.next_id()
@@ -82,7 +82,7 @@ class Database:
         order = OrderModel(date, customer_email, total, sales_items)
         return self._insert_statement('Orders', order.to_sql())
 
-    # --[ DELETE statements ]-- #
+    # --[ delete statements ]-- #
     def delete_user(self, query: dict):
         """Delete a user from the database"""
         return self._delete_statement('Users', query)
@@ -94,6 +94,19 @@ class Database:
     def delete_order(self, query: dict):
         """Delete an order from the database"""
         return self._delete_statement('Orders', query)
+    
+    # --[ update statements ]-- #
+    def update_user(self, query: dict):
+        """Update a user from the database"""
+        pass
+
+    def update_sales_item(self, query: dict):
+        """Update a sales item from the database"""
+        pass
+
+    def update_order(self, query: dict):
+        """Update an order from the database"""
+        pass
 
     def close(self):
         """Close connection to database"""
