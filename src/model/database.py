@@ -11,12 +11,31 @@ class Database:
         conn = sqlite3.connect(db_file_name)
         self._cursor = conn.cursor()
 
+    # --[ database statements ]-- #
+    def _select_all_query(self, table: str, is_cursor=False):
+        rows = self._cursor.execute(f"""SELECT * FROM {table.capitalize()}""")
+        return rows if is_cursor else rows.fetchall()
+
     def _select_query(self, table: str, query: dict, is_cursor=False):
         rows = self._cursor.execute(f"""
         SELECT * FROM {table.capitalize()} WHERE {', '.join([f'{k}={v!r}' for k,v in query.items()])}
         """)
         return rows if is_cursor else rows.fetchall()
 
+    def _insert_statement(self, table: str, statement: str, is_cursor=False):
+        """Insert values into database table. Assumes values are in correct order"""
+        rows = self._cursor.execute(f"""
+        INSERT INTO {table.capitalize()} VALUES ({statement})
+        """)
+        return rows if is_cursor else rows.fetchall()
+    
+    def _delete_statement(self, table: str, query: dict, is_cursor=False):
+        """Delete row matching query from database"""
+        rows = self._cursor.execute(f"""
+        DELETE FROM {table} WHERE {', '.join([f'{k}={v!r}' for k,v in query.items()])}
+        """)
+
+    # --[ SELECT statements ]-- #
     def select_user(self, query: dict, is_raw=False):
         """Select a user from the database"""
         rows = self._select_query('Users', query, is_cursor=is_raw)
@@ -29,14 +48,23 @@ class Database:
     def select_order(self, query: dict):
         """Select an order from the database"""
         return self._select_query('Orders', query)
+    
+    def select_all_users(self, is_raw=False):
+        """Select all users from the database"""
+        rows = self._select_all_query('Users', is_cursor=is_raw)
+        return [UserModel.from_sql(row) for row in rows]
+    
+    def select_all_sales_items(self, is_raw=False):
+        """Select all sales items from the database"""
+        rows = self._select_all_query('Items', is_cursor=is_raw)
+        return [SalesItemModel.from_sql(row) for row in rows]
+    
+    def select_all_orders(self, is_raw=False):
+        """Select all orders from the database"""
+        rows = self._select_all_query('Orders', is_cursor=is_raw)
+        return [OrderModel.from_sql(row) for row in rows]
 
-    def _insert_statement(self, table: str, statement: str, is_cursor=False):
-        """Insert values into database table. Assumes values are in correct order"""
-        rows = self._cursor.execute(f"""
-        INSERT INTO {table.capitalize()} VALUES ({statement})
-        """)
-        return rows if is_cursor else rows.fetchall()
-
+    # --[ INSERT statements ]-- #
     def add_user(self, email, first_name, last_name, role, password_hash, order_ids: list):  # pylint: disable=too-many-arguments
         """Add a user to database"""
         user_id = UserModel.next_id()
@@ -52,6 +80,9 @@ class Database:
         """Add an order to the database"""
         order = OrderModel(date, customer_email, total, sales_items)
         return self._insert_statement('Orders', order.to_sql())
+
+    # --[ DELETE statemetns ]-- #
+    def delete_user(self, query: dict):
 
     def close(self):
         """Close connection to database"""
