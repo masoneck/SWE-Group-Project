@@ -37,5 +37,4 @@ class DatabaseUnitTest(unittest.TestCase):
         """Test the formatting for a user's order_ids"""
         self.db.add_user('johndoe2@gmail.com', 'John', 'Doe', 'customer', 'password', [1, 2])
         user = self.db.select_user({'email': 'johndoe2@gmail.com'})
-        print(f'debug::orders::{user[0].orders}')
         self.assertTrue(user[0].orders == '1,2')
