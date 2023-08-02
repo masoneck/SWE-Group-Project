@@ -37,10 +37,10 @@ class Database:
         """)
         return rows if is_cursor else rows.fetchall()
 
-    def add_user(self, email, first_name, last_name, role, password_hash, order_id: list):
+    def add_user(self, email, first_name, last_name, role, password_hash, order_ids: list):
         """Add a user to database"""
         user_id = UserModel.next_id()
-        user = UserModel(user_id, email, first_name, last_name, role, password_hash, order_id)
+        user = UserModel(user_id, email, first_name, last_name, role, password_hash, order_ids)
         return self._insert_statement('Users', user.to_list())
 
     def add_sales_item(self, name, stock: int, price: float, department_id: int):
