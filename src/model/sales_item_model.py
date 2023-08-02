@@ -17,3 +17,15 @@ class SalesItemModel:
         """Convert python object into SQL row of values"""
         return f'{self.item_id!r}, {self.name!r}, {self.stock!r}, ' \
                f'{self.price!r}, {self.department_id!r}'
+
+    @classmethod
+    def from_sql(cls, sql_row):
+        """Return python object from SQL row"""
+        return cls(*sql_row)
+
+    @staticmethod
+    def next_id():
+        """Return the next available Order ID"""
+        next_id = SalesItemModel.next_item_id
+        SalesItemModel.next_item_id += 1
+        return next_id

@@ -24,6 +24,11 @@ class OrderModel:
         """Return SQL table compatible list of values"""
         return f'{self.order_id!r}, {self.date!r}, {self.total!r}, {self.items!r}'
 
+    @classmethod
+    def from_sql(cls, sql_row):
+        """Return python object from SQL row"""
+        return cls(*sql_row)
+
     @staticmethod
     def next_id():
         """Return the next available Order ID"""
