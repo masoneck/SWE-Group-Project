@@ -28,12 +28,13 @@ class Database:
         INSERT INTO {table.capitalize()} VALUES ({statement})
         """)
         return rows if is_cursor else rows.fetchall()
-    
+
     def _delete_statement(self, table: str, query: dict, is_cursor=False):
         """Delete row matching query from database"""
         rows = self._cursor.execute(f"""
         DELETE FROM {table} WHERE {', '.join([f'{k}={v!r}' for k,v in query.items()])}
         """)
+        return rows if is_cursor else rows.fetchall()
 
     # --[ SELECT statements ]-- #
     def select_user(self, query: dict, is_raw=False):
@@ -48,17 +49,17 @@ class Database:
     def select_order(self, query: dict):
         """Select an order from the database"""
         return self._select_query('Orders', query)
-    
+
     def select_all_users(self, is_raw=False):
         """Select all users from the database"""
         rows = self._select_all_query('Users', is_cursor=is_raw)
         return [UserModel.from_sql(row) for row in rows]
-    
+
     def select_all_sales_items(self, is_raw=False):
         """Select all sales items from the database"""
         rows = self._select_all_query('Items', is_cursor=is_raw)
         return [SalesItemModel.from_sql(row) for row in rows]
-    
+
     def select_all_orders(self, is_raw=False):
         """Select all orders from the database"""
         rows = self._select_all_query('Orders', is_cursor=is_raw)
@@ -83,6 +84,16 @@ class Database:
 
     # --[ DELETE statemetns ]-- #
     def delete_user(self, query: dict):
+        """Delete a user from the database"""
+        return self._delete_statement('Users', query)
+
+    def delete_sales_item(self, query: dict):
+        """Delete a sales item from the database"""
+        return self._delete_statement('Items', query)
+
+    def delete_order(self, query: dict):
+        """Delete an order from the database"""
+        return self._delete_statement('Orders', query)
 
     def close(self):
         """Close connection to database"""
