@@ -1,7 +1,6 @@
 import unittest
 
 from src.model.database import Database
-from src.model.user_model import UserModel
 from data.database_setup import setup_db, delete_db
 
 class DatabaseUnitTest(unittest.TestCase):
@@ -38,4 +37,5 @@ class DatabaseUnitTest(unittest.TestCase):
         """Test the formatting for a user's order_ids"""
         self.db.add_user('johndoe2@gmail.com', 'John', 'Doe', 'customer', 'password', [1, 2])
         user = self.db.select_user({'email': 'johndoe2@gmail.com'})
+        print(f'debug::orders::{user[0].orders}')
         self.assertTrue(user[0].orders == '1,2')

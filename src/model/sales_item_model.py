@@ -13,6 +13,7 @@ class SalesItemModel:
         self.price = price
         self.department_id = department_id
 
-    def to_list(self) -> list:
-        """Return SQL table compatible list of values"""
-        return [self.item_id, self.name, self.stock, self.price, self.department_id]
+    def to_sql(self) -> list:
+        """Convert python object into SQL row of values"""
+        return f'{self.item_id!r}, {self.name!r}, {self.stock!r}, ' \
+               f'{self.price!r}, {self.department_id!r}'

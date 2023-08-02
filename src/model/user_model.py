@@ -25,19 +25,23 @@ class UserModel:
     @property
     def orders(self) -> str:
         """SQL VARCHAR version of orders"""
-        return ','.join([str(oid) for oid in self.order_ids])
+        return ','.join([str(oid) for oid in self.order_ids]) \
+            if isinstance(self.order_ids, list) else self.order_ids
 
-    def to_list(self) -> list:
-        """Return SQL table compatible list of values"""
-        return [self.user_id, self.email, self.first_name, self.last_name,
-                self.role, self.password_hash, self.orders]
+    def to_sql(self) -> list:
+        """Convert python object into SQL row of values"""
+        print(f'debug::orders::{self.orders!r}')
+        return f'{self.user_id!r}, {self.email!r}, {self.first_name!r}, {self.last_name!r}, ' \
+                f'{self.role!r}, {self.password_hash!r}, {self.orders!r}'
 
     @classmethod
     def from_sql(cls, sql_row):
+        """Return python object from SQL row"""
         return cls(*sql_row)
 
     @staticmethod
     def next_id():
+        """Return the next available User ID"""
         next_id = UserModel.next_user_id
         UserModel.next_user_id += 1
         return next_id
