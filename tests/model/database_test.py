@@ -19,10 +19,11 @@ class DatabaseUnitTest(unittest.TestCase):
 
     def test_user_database(self):
         """Test that a user can be created"""
-        self.db.add_user('johndoe@gmail.com', 'John', 'Doe', [])
+        self.db.add_user('johndoe@gmail.com', 'John', 'Doe', [1,7])
         users = self.db.select_user({'first_name': 'John', 'last_name': 'Doe'})
         self.assertTrue(len(users) == 1)
-        self.assertTrue(users[0].first_name == 'John' and users[0].email == 'johndoe@gmail.com')
+        self.assertTrue(users[0].first_name == 'John' and users[0].email == 'johndoe@gmail.com' \
+                        and users[0].orders == [1,7])
         # TODO: add update test
         self.db.delete_user({'email': 'johndoe@gmail.com'})
         users = self.db.select_all_users()
@@ -34,9 +35,3 @@ class DatabaseUnitTest(unittest.TestCase):
             self.db.add_user('invalid?@b@de_ail.39', 'John', 'Doe', [])
         with self.assertRaises(ValueError):
             self.db.add_user('almost@agood_email', 'John', 'Doe', [])
-
-    def test_users_orders_are_formatted(self):
-        """Test the formatting for a user's order_ids"""
-        self.db.add_user('johndoe2@gmail.com', 'John', 'Doe', [1, 2])
-        user = self.db.select_user({'email': 'johndoe2@gmail.com'})
-        self.assertTrue(user[0].orders == [1,2])
