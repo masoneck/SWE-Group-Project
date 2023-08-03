@@ -66,7 +66,7 @@ class Database:
         return [OrderModel.from_sql(row) for row in rows]
 
     # --[ create statements ]-- #
-    def add_user(self, email, first_name, last_name, order_ids):  # pylint: disable=too-many-arguments
+    def add_user(self, email, first_name, last_name, order_ids):
         """Add a user to database"""
         user_id = UserModel.next_id()
         user = UserModel(user_id, email, first_name, last_name, order_ids)
@@ -77,7 +77,7 @@ class Database:
         sales_item = SalesItemModel(name, stock, price, department_id)
         return self._insert_statement('Items', sales_item.to_sql())
 
-    def add_order(self, date, customer_id, total, is_complete, sales_items):  # pylint: disable=too-many-arguments
+    def add_order(self, date, customer_id, total, is_complete, sales_items):
         """Add an order to the database"""
         order_id = OrderModel.next_id()
         order = OrderModel(order_id, date, customer_id, total, is_complete, sales_items)

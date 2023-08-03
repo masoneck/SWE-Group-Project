@@ -9,7 +9,7 @@ def validate_email(email):
 class UserModel:
     """Class to store and manage a User object from database"""
     next_user_id = 0
-    def __init__(self, user_id, email, first_name, last_name, orders):  # pylint: disable=too-many-arguments
+    def __init__(self, user_id, email, first_name, last_name, orders):
         self.user_id = user_id
         if not validate_email(email):
             raise ValueError('Email is not valid: '+str(email))

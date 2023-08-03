@@ -8,12 +8,12 @@ from pathlib import Path
 def setup_db(file_name):
     conn = sqlite3.connect(file_name)
     cursor = conn.cursor()
-    # Create Orders table
+    # Create tables
     create_orders_table(cursor)
-    # Create User table
     create_users_table(cursor)
-    # Create items table
     create_items_table(cursor)
+    create_discounts_table(cursor)
+    # Close connections
     cursor.close()
     conn.close()
 
@@ -32,7 +32,6 @@ def create_items_table(cursor):
         price          MONEY,
         department_id  INTEGER UNSIGNED
     )""")
-
 
 def create_orders_table(cursor):
     cursor.execute("""
@@ -55,6 +54,12 @@ def create_users_table(cursor):
         order_ids  VARCHAR
     )""")
 
+def create_discounts_table(cursor):
+    cursor.execute("""
+    CREATE TABLE Discounts(
+        phrase  VARCHAR,
+        amount  MONEY
+    )""")
 
 if __name__ == '__main__':
     db_file_name = 'database.db' if len(sys.argv) == 1 else sys.argv[1]
