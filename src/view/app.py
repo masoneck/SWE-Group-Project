@@ -7,7 +7,7 @@ external_stylesheets = [dbc.themes.BOOTSTRAP]
 app = Dash(external_stylesheets=external_stylesheets, use_pages=True, pages_folder='src/view/pages')
 
 app.layout = html.Div([
-	html.H1('WIP: Backend website'),
+	html.H1('Administrative Backend:'),
 
     html.Div([
         html.Div(

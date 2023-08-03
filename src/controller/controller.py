@@ -36,6 +36,17 @@ def get_orders():
     db.close()
     return table
 
+def get_discounts():
+    db = Database('data/database.db')
+    discounts = db.select_all_discounts()
+    table = []
+    for discount in discounts:
+        table.append([
+            str(discount.phrase), '$'+str(discount.amount)
+        ])
+    db.close()
+    return table
+
 # def update_sales_item(sales_item_id, **kwargs):
 #     try:
 #         sales_item = SalesItem.query.get(sales_item_id)
