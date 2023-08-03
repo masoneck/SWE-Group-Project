@@ -9,29 +9,21 @@ def validate_email(email):
 class UserModel:
     """Class to store and manage a User object from database"""
     next_user_id = 0
-    def __init__(self, user_id, email, first_name, last_name, role, password_hash, order_ids: list):   # pylint: disable=too-many-arguments
+    def __init__(self, user_id, email, first_name, last_name, orders):  # pylint: disable=too-many-arguments
         self.user_id = user_id
         if not validate_email(email):
             raise ValueError('Email is not valid: '+str(email))
         self.email = email
         self.first_name = first_name.strip().capitalize()
         self.last_name = last_name.strip().capitalize()
-        # TODO: Check that role is in valid range of enums
-        self.role = role
-        # Password should be hashed by client before being sent to server
-        self.password_hash = password_hash
-        self.order_ids = order_ids  # TODO: determine where is string and where is list
-
-    @property
-    def orders(self) -> str:
-        """SQL VARCHAR version of orders"""
-        return ','.join([str(oid) for oid in self.order_ids]) \
-            if isinstance(self.order_ids, list) else self.order_ids
+        self.orders = orders if isinstance(orders, list) else \
+                         [int(oid.strip()) for oid in orders.split(',')]
 
     def to_sql(self) -> list:
         """Convert python object into SQL row of values"""
+        order_ids = ','.join([str(o) for o in self.orders])
         return f'{self.user_id!r}, {self.email!r}, {self.first_name!r}, {self.last_name!r}, ' \
-               f'{self.role!r}, {self.password_hash!r}, {self.orders!r}'
+               f'{order_ids!r}'
 
     @classmethod
     def from_sql(cls, sql_row):
@@ -44,5 +36,3 @@ class UserModel:
         next_id = UserModel.next_user_id
         UserModel.next_user_id += 1
         return next_id
-
-    #TODO: add methods for handling orders (add, search, etc.)

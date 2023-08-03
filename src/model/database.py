@@ -66,10 +66,10 @@ class Database:
         return [OrderModel.from_sql(row) for row in rows]
 
     # --[ create statements ]-- #
-    def add_user(self, email, first_name, last_name, role, password_hash, order_ids: list):  # pylint: disable=too-many-arguments
+    def add_user(self, email, first_name, last_name, order_ids):  # pylint: disable=too-many-arguments
         """Add a user to database"""
         user_id = UserModel.next_id()
-        user = UserModel(user_id, email, first_name, last_name, role, password_hash, order_ids)
+        user = UserModel(user_id, email, first_name, last_name, order_ids)
         return self._insert_statement('Users', user.to_sql())
 
     def add_sales_item(self, name, stock: int, price: float, department_id: int):

@@ -40,7 +40,8 @@ def create_orders_table(cursor):
         order_id   INTEGER PRIMARY KEY AUTOINCREMENT,
         date       DATETIME,
         total      MONEY,
-        items      VARCHAR
+        items      VARCHAR,
+        status     VARCHAR
     )""")
 
 def create_users_table(cursor):
@@ -50,8 +51,6 @@ def create_users_table(cursor):
         email      VARCHAR,
         first_name VARCHAR,
         last_name  VARCHAR,
-        role       VARCHAR,
-        password   VARCHAR,
         order_ids  VARCHAR
     )""")
 
