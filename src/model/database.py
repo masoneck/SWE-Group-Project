@@ -19,7 +19,7 @@ class Database:
 
     def _select_query(self, table: str, query: dict):
         rows = self._cursor.execute(f"""
-        SELECT * FROM {table.capitalize()} WHERE {', '.join([f'{k}={v!r}' for k,v in query.items()])}
+        SELECT * FROM {table.capitalize()} WHERE {' AND '.join([f'{k}={v!r}' for k,v in query.items()])}
         """)
         return rows.fetchall()
 
@@ -33,7 +33,7 @@ class Database:
     def _delete_statement(self, table: str, query: dict):
         """Delete row matching query from database"""
         rows = self._cursor.execute(f"""
-        DELETE FROM {table} WHERE {', '.join([f'{k}={v!r}' for k,v in query.items()])}
+        DELETE FROM {table} WHERE {' AND '.join([f'{k}={v!r}' for k,v in query.items()])}
         """)
         return rows.fetchall()
 
@@ -69,7 +69,7 @@ class Database:
         """Select all orders from the database"""
         rows = self._select_all_query('Orders')
         return [OrderModel.from_sql(row) for row in rows]
-    
+
     def select_all_discounts(self):
         """Select all discounts from the database"""
         rows = self._select_all_query('Discounts')

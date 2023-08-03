@@ -17,7 +17,7 @@ class UserModel:
         self.first_name = first_name.strip().capitalize()
         self.last_name = last_name.strip().capitalize()
         self.orders = orders if isinstance(orders, list) else \
-                         [int(oid.strip()) for oid in orders.split(',')]
+                         [int('0'+oid.strip()) for oid in orders.split(',')]
 
     def to_sql(self) -> list:
         """Convert python object into SQL row of values"""
