@@ -1,4 +1,5 @@
 # general things to ignore
+*.db
 build/
 dist/
 *.egg-info/

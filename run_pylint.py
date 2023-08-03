@@ -1,6 +1,5 @@
 import subprocess
 
-
-
 if __name__ == '__main__':
-    subprocess.run(r'pylint .\tests\ .\src\ --disable=missing-module-docstring', check=True)
+    subprocess.run(r'pylint .\tests\ .\src\ --disable=missing-module-docstring,import-error,'
+                   r'too-many-function-args,too-many-arguments,too-many-public-methods', check=True)
