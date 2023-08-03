@@ -1,28 +1,30 @@
-from src.model.user_model import validate_email
-
 class OrderModel:
     """Class to store and manage an Order object from database"""
     next_order_id = 0
-    def __init__(self, date, customer_email: str, total: float, sales_items: dict):
-        self.order_id = OrderModel.next_order_id
+    def __init__(self, order_id, date, customer_id, total, is_complete, items):
+        self.order_id = order_id
         self.date = date
-        OrderModel.next_order_id += 1
-        if not validate_email(customer_email):
-            raise ValueError('Email is not valid: '+str(customer_email))
-        self.customer_email = customer_email
+        self.customer_id = customer_id
         if total < 0.00:
             raise ValueError('Cannot have negative total amount: '+str(total))
         self.total = total
-        self.sales_items = sales_items
-
-    @property
-    def items(self) -> str:
-        """SQL VARCHAR version of sales items"""
-        return ','.join([f'{k}={v}' for k,v in self.sales_items])
+        if isinstance(is_complete, str):
+            self.is_complete = is_complete.upper() == 'TRUE'
+        else:
+            self.is_complete = is_complete
+        if isinstance(items, str):
+            self.items = {}
+            for pair in items.split(','):
+                item, amount = pair.split('=')
+                self.items[item] = amount
+        else:
+            self.items = dict(items)
 
     def to_sql(self) -> list:
         """Return SQL table compatible list of values"""
-        return f'{self.order_id!r}, {self.date!r}, {self.total!r}, {self.items!r}'
+        item_dict = ','.join([f'{k}={v}' for k,v in self.items])
+        return f'{self.order_id!r}, {self.date!r}, {self.total!r}, ' \
+               f'{str(self.is_complete).upper()}, {item_dict!r}'
 
     @classmethod
     def from_sql(cls, sql_row):

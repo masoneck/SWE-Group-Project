@@ -77,9 +77,10 @@ class Database:
         sales_item = SalesItemModel(name, stock, price, department_id)
         return self._insert_statement('Items', sales_item.to_sql())
 
-    def add_order(self, date, customer_email: str, total: float, sales_items: dict):
+    def add_order(self, date, customer_id, total, is_complete, sales_items):  # pylint: disable=too-many-arguments
         """Add an order to the database"""
-        order = OrderModel(date, customer_email, total, sales_items)
+        order_id = OrderModel.next_id()
+        order = OrderModel(order_id, date, customer_id, total, is_complete, sales_items)
         return self._insert_statement('Orders', order.to_sql())
 
     # --[ delete statements ]-- #
@@ -94,7 +95,7 @@ class Database:
     def delete_order(self, query: dict):
         """Delete an order from the database"""
         return self._delete_statement('Orders', query)
-    
+
     # --[ update statements ]-- #
     def update_user(self, query: dict):
         """Update a user from the database"""

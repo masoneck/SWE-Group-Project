@@ -37,11 +37,12 @@ def create_items_table(cursor):
 def create_orders_table(cursor):
     cursor.execute("""
     CREATE TABLE Orders(
-        order_id   INTEGER PRIMARY KEY AUTOINCREMENT,
-        date       DATETIME,
-        total      MONEY,
-        items      VARCHAR,
-        status     VARCHAR
+        order_id    INTEGER PRIMARY KEY AUTOINCREMENT,
+        date        DATETIME,
+        customer_id VARCHAR,
+        total       MONEY,
+        status      VARCHAR,
+        sales_items VARCHAR
     )""")
 
 def create_users_table(cursor):
