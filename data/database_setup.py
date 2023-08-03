@@ -40,7 +40,7 @@ def create_orders_table(cursor):
         date        DATETIME,
         customer_id VARCHAR,
         total       MONEY,
-        status      VARCHAR,
+        is_complete VARCHAR,
         sales_items VARCHAR
     )""")
 

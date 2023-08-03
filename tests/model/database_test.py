@@ -53,3 +53,19 @@ class DatabaseUnitTest(unittest.TestCase):
             self.db.add_sales_item('Oranges', -11, 4.20, 2)
         with self.assertRaises(ValueError):
             self.db.add_sales_item('Oranges', 11, -4.20, 2)
+
+    def test_order_database(self):
+        """Test interacting with orders in database"""
+        self.db.add_order('2023-01-29 12:34:59', 1, 16.04, True, {1:10,2:20,3:30})
+        previous_orders = self.db.select_order({'is_complete': True})
+        self.assertTrue(len(previous_orders) == 1)
+        current_orders = self.db.select_order({'is_complete': False})
+        self.assertTrue(len(current_orders) == 0)
+        self.db.add_order('2024-11-19 01:02:30', 2, 90.01, False, {1:4})
+        older_order = self.db.select_order({'order_id': 0})
+        newer_order = self.db.select_order({'order_id': 1})
+        self.assertTrue(older_order[0].date < newer_order[0].date)
+        # TODO: add update test
+        self.db.delete_order({'is_complete': True})
+        all_orders = self.db.select_all_orders()
+        self.assertTrue(len(all_orders) == 1)
