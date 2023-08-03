@@ -93,6 +93,11 @@ class Database:
         order = OrderModel(order_id, date, customer_id, total, is_complete, sales_items)
         return self._insert_statement('Orders', order.to_sql())
 
+    def add_discount(self, phrase, amount):
+        """Add an order to the database"""
+        discount = DiscountModel(phrase, amount)
+        return self._insert_statement('Discounts', discount.to_sql())
+
     # --[ delete statements ]-- #
     def delete_user(self, query: dict):
         """Delete a user from the database"""
@@ -105,6 +110,10 @@ class Database:
     def delete_order(self, query: dict):
         """Delete an order from the database"""
         return self._delete_statement('Orders', query)
+
+    def delete_discount(self, query: dict):
+        """Delete a discount from the database"""
+        return self._delete_statement('Discounts', query)
 
     # --[ update statements ]-- #
     def update_user(self, query: dict):
