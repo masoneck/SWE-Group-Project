@@ -69,3 +69,14 @@ class DatabaseUnitTest(unittest.TestCase):
         self.db.delete_order({'is_complete': True})
         all_orders = self.db.select_all_orders()
         self.assertTrue(len(all_orders) == 1)
+
+    def test_discount_database(self):
+        """Test interacting with discounts in database"""
+        self.db.add_discount('FREEMONEY', 0.10)
+        discounts = self.db.select_discount({'phrase': 'FREEMONEY'})
+        self.assertTrue(len(discounts) == 1)
+        self.assertTrue(discounts[0].amount == 0.10)
+        # TODO: update discount
+        self.db.delete_discount({'phrase': 'FREEMONEY'})
+        all_discounts = self.db.select_all_discounts()
+        self.assertTrue(len(all_discounts) == 0)
