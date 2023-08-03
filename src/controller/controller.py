@@ -1,35 +1,39 @@
 from src.model.database import Database
 
-DATABASE = Database('data/database.db')
-
 def get_users():
-    users = DATABASE.select_all_users()
+    db = Database('data/database.db')
+    users = db.select_all_users()
     table = []
     for user in users:
         table.append([
             str(user.user_id), str(user.email), str(user.first_name),
             str(user.last_name), str(user.orders)
         ])
+    db.close()
     return table if len(table) > 1 else table + []
 
 def get_items():
-    items = DATABASE.select_all_sales_items()
+    db = Database('data/database.db')
+    items = db.select_all_sales_items()
     table = []
     for item in items:
         table.append([
             str(item.item_id), str(item.name), str(item.stock), '$'+str(item.price),
             str(item.department_id)
         ])
+    db.close()
     return table if len(table) > 1 else table + []
 
 def get_orders():
-    orders = DATABASE.select_all_orders()
+    db = Database('data/database.db')
+    orders = db.select_all_orders()
     table = []
     for order in orders:
         table.append([
             str(order.order_id), str(order.date), str(order.customer_id), '$'+str(order.total),
             str(order.is_complete), str(order.sales_items)
         ])
+    db.close()
     return table
 
 # def update_sales_item(sales_item_id, **kwargs):
