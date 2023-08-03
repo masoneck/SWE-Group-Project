@@ -84,7 +84,8 @@ class Database:
 
     def add_sales_item(self, name, stock: int, price: float, department_id: int):
         """Add a sales item to the database"""
-        sales_item = SalesItemModel(name, stock, price, department_id)
+        item_id = SalesItemModel.next_id()
+        sales_item = SalesItemModel(item_id, name, stock, price, department_id)
         return self._insert_statement('Items', sales_item.to_sql())
 
     def add_order(self, date, customer_id, total, is_complete, sales_items):

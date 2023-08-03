@@ -1,9 +1,8 @@
 class SalesItemModel:
     """Class to store and manage a Sales Item object from database"""
     next_item_id = 0
-    def __init__(self, name, stock, price, department_id):
-        self.item_id = SalesItemModel.next_item_id
-        SalesItemModel.next_item_id += 1
+    def __init__(self, item_id, name, stock, price, department_id):
+        self.item_id = item_id
         self.name = name
         if stock < 0:
             raise ValueError('Cannot have negative stock: '+str(stock))
