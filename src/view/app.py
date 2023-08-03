@@ -4,7 +4,7 @@ import dash_bootstrap_components as dbc
 
 
 external_stylesheets = [dbc.themes.BOOTSTRAP]
-app = Dash(external_stylesheets=external_stylesheets, use_pages=True)
+app = Dash(external_stylesheets=external_stylesheets, use_pages=True, pages_folder='src/view/pages')
 
 app.layout = html.Div([
 	html.H1('WIP: Backend website'),
@@ -23,5 +23,5 @@ app.layout = html.Div([
 
 # Run this app with `python3 app.py` and
 # visit http://127.0.0.1:8050/ in your web browser.
-if __name__ == '__main__':
+def start():
     app.run(debug=True)
