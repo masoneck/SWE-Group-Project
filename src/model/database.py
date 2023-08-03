@@ -1,8 +1,9 @@
 import sqlite3
 
-from src.model.user_model import UserModel
-from src.model.sales_item_model import SalesItemModel
+from src.model.discount_model import DiscountModel
 from src.model.order_model import OrderModel
+from src.model.sales_item_model import SalesItemModel
+from src.model.user_model import UserModel
 
 class Database:
     """Class to execute queries and statements."""
@@ -12,34 +13,34 @@ class Database:
         self._cursor = conn.cursor()
 
     # --[ database statements ]-- #
-    def _select_all_query(self, table: str, is_cursor=False):
+    def _select_all_query(self, table: str):
         rows = self._cursor.execute(f"""SELECT * FROM {table.capitalize()}""")
-        return rows if is_cursor else rows.fetchall()
+        return rows.fetchall()
 
-    def _select_query(self, table: str, query: dict, is_cursor=False):
+    def _select_query(self, table: str, query: dict):
         rows = self._cursor.execute(f"""
         SELECT * FROM {table.capitalize()} WHERE {', '.join([f'{k}={v!r}' for k,v in query.items()])}
         """)
-        return rows if is_cursor else rows.fetchall()
+        return rows.fetchall()
 
-    def _insert_statement(self, table: str, statement: str, is_cursor=False):
+    def _insert_statement(self, table: str, statement: str):
         """Insert values into database table. Assumes values are in correct order"""
         rows = self._cursor.execute(f"""
         INSERT INTO {table.capitalize()} VALUES ({statement})
         """)
-        return rows if is_cursor else rows.fetchall()
+        return rows.fetchall()
 
-    def _delete_statement(self, table: str, query: dict, is_cursor=False):
+    def _delete_statement(self, table: str, query: dict):
         """Delete row matching query from database"""
         rows = self._cursor.execute(f"""
         DELETE FROM {table} WHERE {', '.join([f'{k}={v!r}' for k,v in query.items()])}
         """)
-        return rows if is_cursor else rows.fetchall()
+        return rows.fetchall()
 
     # --[ read statements ]-- #
-    def select_user(self, query: dict, is_raw=False):
+    def select_user(self, query: dict):
         """Select a user from the database"""
-        rows = self._select_query('Users', query, is_cursor=is_raw)
+        rows = self._select_query('Users', query)
         return [UserModel.from_sql(row) for row in rows]
 
     def select_sales_item(self, query: dict):
@@ -50,20 +51,29 @@ class Database:
         """Select an order from the database"""
         return self._select_query('Orders', query)
 
-    def select_all_users(self, is_raw=False):
+    def select_discount(self, query: dict):
+        """Select a discount from the database"""
+        return self._select_query('Discounts', query)
+
+    def select_all_users(self):
         """Select all users from the database"""
-        rows = self._select_all_query('Users', is_cursor=is_raw)
+        rows = self._select_all_query('Users')
         return [UserModel.from_sql(row) for row in rows]
 
-    def select_all_sales_items(self, is_raw=False):
+    def select_all_sales_items(self):
         """Select all sales items from the database"""
-        rows = self._select_all_query('Items', is_cursor=is_raw)
+        rows = self._select_all_query('Items')
         return [SalesItemModel.from_sql(row) for row in rows]
 
-    def select_all_orders(self, is_raw=False):
+    def select_all_orders(self):
         """Select all orders from the database"""
-        rows = self._select_all_query('Orders', is_cursor=is_raw)
+        rows = self._select_all_query('Orders')
         return [OrderModel.from_sql(row) for row in rows]
+    
+    def select_all_discounts(self):
+        """Select all discounts from the database"""
+        rows = self._select_all_query('Discounts')
+        return [DiscountModel.from_sql(row) for row in rows]
 
     # --[ create statements ]-- #
     def add_user(self, email, first_name, last_name, order_ids):
