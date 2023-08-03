@@ -45,15 +45,18 @@ class Database:
 
     def select_sales_item(self, query: dict):
         """Select a sales item from the database"""
-        return self._select_query('Items', query)
+        rows = self._select_query('Items', query)
+        return [SalesItemModel.from_sql(row) for row in rows] 
 
     def select_order(self, query: dict):
         """Select an order from the database"""
-        return self._select_query('Orders', query)
+        rows = self._select_query('Orders', query)
+        return [OrderModel.from_sql(row) for row in rows] 
 
     def select_discount(self, query: dict):
         """Select a discount from the database"""
-        return self._select_query('Discounts', query)
+        rows = self._select_query('Discounts', query)
+        return [DiscountModel.from_sql(row) for row in rows] 
 
     def select_all_users(self):
         """Select all users from the database"""
