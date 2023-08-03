@@ -2,37 +2,35 @@ from src.model.database import Database
 
 DATABASE = Database('data/database.db')
 
-# def get_users():
-#     try:
-#         users = User.query.all()
-#         return users
-#     except Exception as e:
-#         print(f"An error occurred while fetching users: {str(e)}")
-#         return None
+def get_users():
+    users = DATABASE.select_all_users()
+    table = []
+    for user in users:
+        table.append([
+            str(user.user_id), str(user.email), str(user.first_name),
+            str(user.last_name), str(user.orders)
+        ])
+    return table if len(table) > 1 else table + []
 
-# def get_sales_items():
-#     try:
-#         sales_items = SalesItem.query.all()
-#         return sales_items
-#     except Exception as e:
-#         print(f"An error occurred while fetching sales items: {str(e)}")
-#         return None
+def get_items():
+    items = DATABASE.select_all_sales_items()
+    table = []
+    for item in items:
+        table.append([
+            str(item.item_id), str(item.name), str(item.stock), '$'+str(item.price),
+            str(item.department_id)
+        ])
+    return table if len(table) > 1 else table + []
 
-# def get_previous_orders():
-#     try:
-#         previous_orders = Order.query.filter_by(completed=True).all()
-#         return previous_orders
-#     except Exception as e:
-#         print(f"An error occurred while fetching previous orders: {str(e)}")
-#         return None
-
-# def get_current_orders():
-#     try:
-#         current_orders = Order.query.filter_by(completed=False).all()
-#         return current_orders
-#     except Exception as e:
-#         print(f"An error occurred while fetching current orders: {str(e)}")
-#         return None
+def get_orders():
+    orders = DATABASE.select_all_orders()
+    table = []
+    for order in orders:
+        table.append([
+            str(order.order_id), str(order.date), str(order.customer_id), '$'+str(order.total),
+            str(order.is_complete), str(order.sales_items)
+        ])
+    return table
 
 # def update_sales_item(sales_item_id, **kwargs):
 #     try:
