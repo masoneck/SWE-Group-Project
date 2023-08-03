@@ -1,7 +1,7 @@
 import dash
 from dash import Dash, html, dcc, Input, Output, State, callback
 import dash_bootstrap_components as dbc
-from pages import inventory
+#from pages import inventory
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CERULEAN],
                 meta_tags=[{'name': 'viewport',
@@ -27,13 +27,14 @@ app.layout = dbc.Container([
 # ---------- Callbacks ----------
 
 @callback(Output('tabs-content', 'children'),
-              Input('tabs', 'value'))
+          Input('tabs', 'value')
+          )
 def render_content(tab):
     if tab == 'tab-1':
         return html.Div([
             html.H6("Item:"),
               dcc.Textarea(
-                    id='textarea-user',
+                    id='textarea-item',
                     placeholder='Enter Item Name',
                     rows='1',
                     maxLength='32',
@@ -46,22 +47,73 @@ def render_content(tab):
                     maxLength='32',
                     style={'width': '80%'}),
               html.Div(),
-              html.Button('Submit', id='textarea-state-button', n_clicks=0),
-              html.Div(id='textarea-state-example-output', style={'whiteSpace': 'pre-line'})
+              html.Button('Submit', id='submit-button1', n_clicks=0),
+              html.Div(id='items-output', style={'whiteSpace': 'pre-line'})
         ])
     elif tab == 'tab-2':
         return html.Div([
-            html.H3('Tab content 2')
+            html.H6("User:"),
+            dcc.Textarea(
+                    id='textarea-user',
+                    placeholder='User Name',
+                    rows='1',
+                    maxLength='32',
+                    style={'width': '80%'}),
+            html.H6("Value:"),
+            dcc.Textarea(
+                    id='textarea-pass',
+                    placeholder='Value',
+                    rows='1',
+                    maxLength='32',
+                    style={'width': '80%'}),
+            html.Div(),
+            html.Button('Submit', id='submit-button2', n_clicks=0),
+            html.Div(id='users-output', style={'whiteSpace': 'pre-line'})
         ])
     elif tab == 'tab-3':
         return html.Div([
-            html.H3('Tab content 3')
+            html.H6("List of Current Orders:"),
+            html.P("Sort by:"),
+            dcc.RadioItems(['Date', 'Customer','Order Cost'], 'Date', inline=True),
+            html.Div(id='curr-orders-output', style={'whiteSpace': 'pre-line'})
         ])
     elif tab == 'tab-4':
         return html.Div([
-            html.H3('Tab content 4')
+            html.H6("List of Previous Orders:"),
+            html.P("Sort by:"),
+            dcc.RadioItems(['Date', 'Customer','Order Cost'], 'Date', inline=True),
+            html.Div(id='prev-orders-output', style={'whiteSpace': 'pre-line'})
         ])
     
+@callback(
+    Output('items-output', 'children'),
+    Input('submit-button1', 'n_clicks'),
+    State('textarea-item', 'value')
+    )
+def update_output(n_clicks, value):
+    lines = ["one line", "two line", "three line"] #Load db strings here
+    childlist = []
+    i = 0
+    for each in lines:
+        childlist.append(html.Tr(lines[i]))
+        i += 1
+    if n_clicks > 0:
+            return html.Table(className='table table-hover', children=childlist)
+        
+@callback(
+    Output('users-output', 'children'),
+    Input('submit-button2', 'n_clicks'),
+    State('textarea-user', 'value')
+    )
+def update_output2(n_clicks, value):
+    lines = ["one line", "two line", "three line"] #Load db strings here
+    childlist = []
+    i = 0
+    for each in lines:
+        childlist.append(html.Tr(lines[i]))
+        i += 1
+    if n_clicks > 0:
+            return html.Table(className='table table-hover', children=childlist)
 
 # Run this app with `python3 app.py` and
 # visit http://127.0.0.1:8050/ in your web browser.
