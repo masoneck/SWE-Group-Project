@@ -24,7 +24,6 @@ class DatabaseUnitTest(unittest.TestCase):
         self.assertTrue(len(users) == 1)
         self.assertTrue(users[0].first_name == 'John' and users[0].email == 'johndoe@gmail.com' \
                         and users[0].orders == [1,7])
-        # TODO: add update test
         self.db.delete_user({'email': 'johndoe@gmail.com'})
         users = self.db.select_all_users()
         self.assertTrue(len(users) == 0)
@@ -42,7 +41,6 @@ class DatabaseUnitTest(unittest.TestCase):
         items = self.db.select_sales_item({'name': 'Apple', 'stock': 7})
         self.assertTrue(len(items) == 1)
         self.assertTrue(items[0].department_id == 1 and items[0].price == 12.34)
-        # TODO: add update test
         self.db.delete_sales_item({'name': 'Apple'})
         items = self.db.select_all_sales_items()
         self.assertTrue(len(items) == 0)
@@ -65,7 +63,6 @@ class DatabaseUnitTest(unittest.TestCase):
         older_order = self.db.select_order({'order_id': 0})
         newer_order = self.db.select_order({'order_id': 1})
         self.assertTrue(older_order[0].date < newer_order[0].date)
-        # TODO: add update test
         self.db.delete_order({'is_complete': True})
         all_orders = self.db.select_all_orders()
         self.assertTrue(len(all_orders) == 1)
@@ -76,7 +73,26 @@ class DatabaseUnitTest(unittest.TestCase):
         discounts = self.db.select_discount({'phrase': 'FREEMONEY'})
         self.assertTrue(len(discounts) == 1)
         self.assertTrue(discounts[0].amount == 0.10)
-        # TODO: update discount
         self.db.delete_discount({'phrase': 'FREEMONEY'})
         all_discounts = self.db.select_all_discounts()
         self.assertTrue(len(all_discounts) == 0)
+
+    def test_update_users_in_database(self):
+        """Test updating a user's value"""
+        self.db.add_user('wrong@email.com', 'Alice', 'Bob', [])
+        self.db.update_user({'email': 'wrong@email.com'}, {'email': 'right@email.com'})
+        user = self.db.select_user({'email':'right@email.com'})
+        self.assertTrue(len(user) == 1)
+        self.db.delete_user({'first_name': 'Alice', 'last_name': 'Bob'})
+        all_users = self.db.select_all_users()
+        self.assertTrue(len(all_users) == 0)
+
+    def test_update_sales_items_in_database(self):
+        """Test updating a sales item's value"""
+        self.db.add_sales_item('Toothpaste', 3, 2.10, 3)
+        self.db.update_sales_item({'name': 'Toothpaste'}, {'stock': 25})
+        sales_item = self.db.select_sales_item({'name':'Toothpaste', 'price': 2.10})
+        self.assertTrue(len(sales_item) == 1)
+        self.db.delete_sales_item({'name': 'Toothpaste', 'stock': 25})
+        all_sales_items = self.db.select_all_sales_items()
+        self.assertTrue(len(all_sales_items) == 0)

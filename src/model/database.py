@@ -37,6 +37,14 @@ class Database:
         """)
         return rows.fetchall()
 
+    def _update_statement(self, table: str, query: dict, values: dict):
+        """Update row from database matching query with values"""
+        rows = self._cursor.execute(f"""
+        UPDATE {table} SET {', '.join([f'{k}={v!r}' for k,v in values.items()])} 
+        WHERE {' AND '.join([f'{k}={v!r}' for k,v in query.items()])}
+        """)
+        return rows.fetchall()
+
     # --[ read statements ]-- #
     def select_user(self, query: dict):
         """Select a user from the database"""
@@ -122,19 +130,19 @@ class Database:
     # --[ update statements ]-- #
     def update_user(self, query: dict, values: dict):
         """Update a user from the database"""
-        pass
+        return self._update_statement('Users', query, values)
 
     def update_sales_item(self, query: dict, values: dict):
         """Update a sales item from the database"""
-        pass
+        return self._update_statement('Items', query, values)
 
     def update_order(self, query: dict, values: dict):
         """Update an order from the database"""
-        pass
+        return self._update_statement('Orders', query, values)
 
     def update_discount(self, query: dict, values: dict):
         """Update a discount from the database"""
-        pass
+        return self._update_statement('Discounts', query, values)
 
     def close(self):
         """Close connection to database"""
