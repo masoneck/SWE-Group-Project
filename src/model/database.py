@@ -117,16 +117,20 @@ class Database:
         return self._delete_statement('Discounts', query)
 
     # --[ update statements ]-- #
-    def update_user(self, query: dict):
+    def update_user(self, query: dict, values: dict):
         """Update a user from the database"""
         pass
 
-    def update_sales_item(self, query: dict):
+    def update_sales_item(self, query: dict, values: dict):
         """Update a sales item from the database"""
         pass
 
-    def update_order(self, query: dict):
+    def update_order(self, query: dict, values: dict):
         """Update an order from the database"""
+        pass
+
+    def update_discount(self, query: dict, values: dict):
+        """Update a discount from the database"""
         pass
 
     def close(self):
