@@ -3,19 +3,20 @@ import unittest
 from src.model.database import Database
 from data.database_setup import setup_db, delete_db
 
+DATABASE_FILE_NAME = 'data/unittest.db'
+
 class DatabaseUnitTest(unittest.TestCase):
-    """Example testing class"""
+    """Test cases for model and database"""
 
     @classmethod
     def setUpClass(cls):
-        # TODO: setup DB in :memory:
-        setup_db('data/unittest.db')
-        cls.db = Database('data/unittest.db')
+        setup_db(DATABASE_FILE_NAME)
+        cls.db = Database(DATABASE_FILE_NAME)
 
     @classmethod
     def tearDownClass(cls):
         cls.db.close()
-        delete_db('data/unittest.db')
+        delete_db(DATABASE_FILE_NAME)
 
     def test_user_database(self):
         """Test interacting with users in database"""
