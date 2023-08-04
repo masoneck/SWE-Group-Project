@@ -11,7 +11,7 @@ dash.register_page(__name__)
 
 def show_layout():
     return html.Div([
-        html.H4('All items:'),
+        html.H2('All items:'),
         dbc.Table([
             html.Thead([
                 html.Tr([
