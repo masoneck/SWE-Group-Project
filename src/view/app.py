@@ -80,20 +80,20 @@ def render_content(tab):
         return html.Div([
             html.H6("List of Current Orders:"),
             html.P("Sort by:"),
-            dcc.RadioItems(['Date', 'Customer','Order Cost'], 'Date', inline=True),
+            dcc.Dropdown(['Date', 'Customer','Order Cost'], 'Date', id='selector1'),
             html.Div(
                 html.Div(id='curr-orders-output', style={'whiteSpace': 'pre-line'}),
-                className='bg-white', 
+                className='bg-secondary', 
                 style={'width' : '80%'})
         ])
     elif tab == 'tab-4':
         return html.Div([
             html.H6("List of Previous Orders:"),
             html.P("Sort by:"),
-            dcc.RadioItems(['Date', 'Customer','Order Cost'], 'Date', inline=True),
+            dcc.Dropdown(['Date', 'Customer','Order Cost'], 'Date', id='selector2'),
             html.Div(
                 html.Div(id='prev-orders-output', style={'whiteSpace': 'pre-line'}),
-                className='bg-white', 
+                className='bg-secondary', 
                 style={'width' : '80%'})
         ])
     
@@ -127,6 +127,31 @@ def update_output2(n_clicks, value):
     if n_clicks > 0:
             return html.Table(className='table table-striped', children=childlist)
 
+@callback(
+    Output('curr-orders-output', 'children'),
+    Input('selector1', 'value')
+)
+def update_output3(value):
+    lines = ["one line", "two line", "three line"] #Load db strings here
+    childlist = []
+    i = 0
+    for each in lines:
+        childlist.append(html.Tr(lines[i]))
+        i += 1
+    return html.Table(className='table table-striped', children=childlist)
+
+@callback(
+    Output('prev-orders-output', 'children'),
+    Input('selector2', 'value')
+)
+def update_output4(value):
+    lines = ["one line", "two line", "three line"] #Load db strings here
+    childlist = []
+    i = 0
+    for each in lines:
+        childlist.append(html.Tr(lines[i]))
+        i += 1
+    return html.Table(className='table table-striped', children=childlist)
 # Run this app with `python3 app.py` and
 # visit http://127.0.0.1:8050/ in your web browser.
 if __name__ == '__main__':
