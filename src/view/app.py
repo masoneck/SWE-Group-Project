@@ -48,7 +48,10 @@ def render_content(tab):
                     style={'width': '80%'}),
               html.Div(),
               html.Button('Submit', id='submit-button1', n_clicks=0),
-              html.Div(id='items-output', style={'whiteSpace': 'pre-line'})
+              html.Div(
+                  html.Div(id='items-output', style={'whiteSpace': 'pre-line'}),
+                  className='bg-white', 
+                  style={'width' : '80%'})
         ])
     elif tab == 'tab-2':
         return html.Div([
@@ -68,21 +71,30 @@ def render_content(tab):
                     style={'width': '80%'}),
             html.Div(),
             html.Button('Submit', id='submit-button2', n_clicks=0),
-            html.Div(id='users-output', style={'whiteSpace': 'pre-line'})
+            html.Div(
+                html.Div(id='users-output', style={'whiteSpace': 'pre-line'}),
+                className='bg-white', 
+                style={'width' : '80%'})
         ])
     elif tab == 'tab-3':
         return html.Div([
             html.H6("List of Current Orders:"),
             html.P("Sort by:"),
             dcc.RadioItems(['Date', 'Customer','Order Cost'], 'Date', inline=True),
-            html.Div(id='curr-orders-output', style={'whiteSpace': 'pre-line'})
+            html.Div(
+                html.Div(id='curr-orders-output', style={'whiteSpace': 'pre-line'}),
+                className='bg-white', 
+                style={'width' : '80%'})
         ])
     elif tab == 'tab-4':
         return html.Div([
             html.H6("List of Previous Orders:"),
             html.P("Sort by:"),
             dcc.RadioItems(['Date', 'Customer','Order Cost'], 'Date', inline=True),
-            html.Div(id='prev-orders-output', style={'whiteSpace': 'pre-line'})
+            html.Div(
+                html.Div(id='prev-orders-output', style={'whiteSpace': 'pre-line'}),
+                className='bg-white', 
+                style={'width' : '80%'})
         ])
     
 @callback(
@@ -98,7 +110,7 @@ def update_output(n_clicks, value):
         childlist.append(html.Tr(lines[i]))
         i += 1
     if n_clicks > 0:
-            return html.Table(className='table table-hover', children=childlist)
+            return html.Table(className='table table-striped table-active', children=childlist)
         
 @callback(
     Output('users-output', 'children'),
@@ -113,7 +125,7 @@ def update_output2(n_clicks, value):
         childlist.append(html.Tr(lines[i]))
         i += 1
     if n_clicks > 0:
-            return html.Table(className='table table-hover', children=childlist)
+            return html.Table(className='table table-striped', children=childlist)
 
 # Run this app with `python3 app.py` and
 # visit http://127.0.0.1:8050/ in your web browser.
